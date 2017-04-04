@@ -9,17 +9,17 @@ UCLASS()
 class ARENABATTLE_API ABP_Weapon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ABP_Weapon();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
 
-	
-	
+	// Called every frame
+	virtual void Tick(float DeltaSeconds) override;
+
+
+
 };

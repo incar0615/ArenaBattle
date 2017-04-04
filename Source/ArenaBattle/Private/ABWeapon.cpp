@@ -7,13 +7,13 @@
 // Sets default values
 AABWeapon::AABWeapon()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponHash"));
-	RootComponent = Weapon;
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Weapon(TEXT("SkeletalMesh'/Game/InfinityBladeWeapons/Weapons/Blade/Silly_Weapons/Blade_Finger/SK_Bade_Finger.SK_Bade_Finger'"));
 
-	Weapon->SetSkeletalMesh(SK_Weapon.Object);
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponHashValue"));
+	RootComponent = Weapon;
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_BlackKnight(TEXT("SkeletalMesh'/Game/InfinityBladeWeapons/Weapons/Blade/Swords/Blade_BlackKnight/SK_Blade_BlackKnight.SK_Blade_BlackKnight'"));
+	Weapon->SetSkeletalMesh(SK_BlackKnight.Object);
 }
 
 // Called when the game starts or when spawned
@@ -24,9 +24,9 @@ void AABWeapon::BeginPlay()
 }
 
 // Called every frame
-void AABWeapon::Tick( float DeltaTime )
+void AABWeapon::Tick(float DeltaTime)
 {
-	Super::Tick( DeltaTime );
+	Super::Tick(DeltaTime);
 
 }
 

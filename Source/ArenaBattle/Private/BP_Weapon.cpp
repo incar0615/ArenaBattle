@@ -7,7 +7,7 @@
 // Sets default values
 ABP_Weapon::ABP_Weapon()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -16,13 +16,13 @@ ABP_Weapon::ABP_Weapon()
 void ABP_Weapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
-void ABP_Weapon::Tick( float DeltaTime )
+void ABP_Weapon::Tick(float DeltaTime)
 {
-	Super::Tick( DeltaTime );
+	Super::Tick(DeltaTime);
 
 }
 
