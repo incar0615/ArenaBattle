@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ArenaBattle.h"
+#include "ABGameInstance.h"
 #include "ABPawn.h"
 
 
@@ -10,7 +11,6 @@ AABPawn::AABPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	
 	Body = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Body"));
 	RootComponent = Body;
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
@@ -32,13 +32,34 @@ AABPawn::AABPawn()
 	Mesh->SetSkeletalMesh(SK_CharM_Cardboard.Object);
 
 	this->AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+	MaxHP = 100.0f;
+
+	
 }
 
 // Called when the game starts or when spawned
 void AABPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CurrentHP = MaxHP;
+
+	int32 NewIndex = FMath::RandRange(0, CharacterAssets.Num() - 1);
+	UABGameInstance* ABGameInstance = Cast<UABGameInstance>(GetGameInstance());
+
+	for (int i = 0; i < CharacterAssets.Num() - 1; i++) {
+		ABGameInstance->AssetLoader.SimpleAsyncLoad(CharacterAssets[i]);
+	}
+
+	if (ABGameInstance)
+	{
+		TAssetPtr<USkeletalMesh> NewCharacter = Cast<USkeletalMesh>(ABGameInstance->AssetLoader.SynchronousLoad(CharacterAssets[NewIndex]));
+		if (NewCharacter)
+		{
+			Mesh->SetSkeletalMesh(NewCharacter.Get());
+		}
+	}
 }
 
 // Called every frame
