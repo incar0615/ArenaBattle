@@ -3,17 +3,18 @@
 #include "WebService.h"
 #include "WebConnect.h"
 
+DEFINE_LOG_CATEGORY(WebConnection);
 
-
-
-UWebConnect::UWebConnect() {
-	UE_LOG(LogClass, Warning, TEXT("WebConnect Constructor Call!"));
-
+UWebConnection::UWebConnection()
+{
+	UE_LOG(WebConnection, Warning, TEXT("WebConnection Constructor Call!"));
 	Host = TEXT("localhost:8000");
 	URI = TEXT("/");
 }
 
-void UWebConnect::RequestToken()
+void UWebConnection::RequestToken(const FString& UserID)
 {
-	UE_LOG(LogClass, Warning, TEXT("Request Token Call!"));
+	UE_LOG(WebConnection, Warning, TEXT("Request Token Call!"));
+	//TokenCompleteDelegate.ExecuteIfBound(TEXT("0LCJydGkiOiI2a3NjVE9pTUNESVZWM05qVTIyUnlTIn0.VJyMOicM"));
+	TokenCompleteDelegate.Broadcast(TEXT("0LCJydGkiOiI2a3NjVE9pTUNESVZWM05qVTIyUnlTIn0.VJyMOicM"));
 }
