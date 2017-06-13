@@ -5,6 +5,13 @@
 #include "GameFramework/Pawn.h"
 #include "ABPawn.generated.h"
 
+UENUM(BlueprintType)
+enum class EPlayerState : uint8{
+
+	PEACE,
+	BATTLE
+};
+
 UCLASS(config = Game)
 class ARENABATTLE_API AABPawn : public APawn
 {
@@ -51,6 +58,10 @@ public:
 		void CharacterMeshDeferred();
 	//FStreamableDelegate StreamableDelegate;
 
+	EPlayerState CurrentState;
+
+	UFUNCTION()
+		void OnNormalAttackEnd();
 private:
 	int32 NewIndex;
 
@@ -59,10 +70,16 @@ private:
 
 	float CurrentLeftRightVal;
 	float CurrentUpDownVal;
+	
 
 	UFUNCTION()
 		void UpDownInput(float NewInputVal);
 
 	UFUNCTION()
 		void LeftRightInput(float NewInputval);
+
+	UFUNCTION()
+		void OnPressNormalAttack();
+
+	
 };

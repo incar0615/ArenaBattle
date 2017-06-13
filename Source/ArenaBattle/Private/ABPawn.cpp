@@ -2,6 +2,7 @@
 
 #include "ArenaBattle.h"
 #include "ABGameInstance.h"
+#include "ABAnimInstance.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "ABPawn.h"
 
@@ -41,6 +42,7 @@ AABPawn::AABPawn()
 
 
 	MaxHP = 100.0f;
+	CurrentState = EPlayerState::PEACE;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
@@ -74,14 +76,23 @@ void AABPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector InputVector = FVector(CurrentUpDownVal, CurrentLeftRightVal, 0.0F);
-	if (InputVector.SizeSquared() > 0.0F)
-	{
-		FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(InputVector);
-		SetActorRotation(TargetRotation);
-		AddMovementInput(GetActorForwardVector());
-	}
 
+	FVector InputVector = FVector(CurrentUpDownVal, CurrentLeftRightVal, 0.0F);
+
+	switch (CurrentState)
+	{
+	case EPlayerState::PEACE:
+		if (InputVector.SizeSquared() > 0.0F)
+		{
+			FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(InputVector);
+			SetActorRotation(TargetRotation);
+			AddMovementInput(GetActorForwardVector());
+		}
+		break;
+
+	case EPlayerState::BATTLE:
+		break;
+	}
 }
 
 // Called to bind functionality to input
@@ -89,8 +100,10 @@ void AABPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
 
+
 	InputComponent->BindAxis("LeftRight", this, &AABPawn::LeftRightInput);
 	InputComponent->BindAxis("UpDown", this, &AABPawn::UpDownInput);
+	InputComponent->BindAction("NormalAttack", EInputEvent::IE_Pressed, this,& AABPawn::OnPressNormalAttack);
 }
 
 void AABPawn::LeftRightInput(float NewInputVal)
@@ -101,4 +114,18 @@ void AABPawn::LeftRightInput(float NewInputVal)
 void AABPawn::UpDownInput(float NewInputVal)
 {
 	CurrentUpDownVal = NewInputVal;
+}
+
+void AABPawn::OnPressNormalAttack()
+{
+	CurrentState = EPlayerState::BATTLE;
+
+	UABAnimInstance* AnimInst = Cast<UABAnimInstance>(Mesh->GetAnimInstance());
+	if (AnimInst) {
+		AnimInst->ReceiveNormalAttackInput();
+	}
+}
+
+void AABPawn::OnNormalAttackEnd() {
+	CurrentState = EPlayerState::PEACE;
 }
